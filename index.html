@@ -624,12 +624,18 @@ function collectAllData(){
     CANTEEN_VENDORS,
     VENDING_VENDORS,
     programs: data,
+      hiddenPrograms: [...hiddenPrograms],   // ← ADD THIS LINE
     _savedAt: new Date().toISOString()
   };
 }
 
 // ── Apply fetched JSON back to all data objects ──
 function applyJSONData(json){
+    // ← ADD THESE 4 LINES AT THE TOP:
+  if(Array.isArray(json.hiddenPrograms)){
+    hiddenPrograms = new Set(json.hiddenPrograms);
+    saveHiddenPrograms();
+  }
   if(json.DA_CLUBS){
     Object.entries(json.DA_CLUBS).forEach(([club,yrs])=>{
       if(DA_CLUBS[club]) Object.entries(yrs).forEach(([yr,rows])=>{ if(rows&&rows.length) DA_CLUBS[club][yr]=rows; });
